@@ -1,2 +1,2 @@
-# akira
-Project akira
+# AKIRA
+Project AKIRA
