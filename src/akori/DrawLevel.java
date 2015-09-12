@@ -27,7 +27,6 @@ import org.openqa.selenium.*;
  * @author Claudio
  */
 public class DrawLevel {
-
     public static void main(String[] args) throws Exception {
         System.out.println("esto es DrawLevel");
 
@@ -35,10 +34,9 @@ public class DrawLevel {
             "http://www.mbauchile.cl"
         };
 
-        String PATH = "C:\\Users\\Lalo\\Desktop\\Lalo\\U\\Trabajo de Título\\Experimento y Análisis\\Códigos\\objetos\\test2\\";
+        String PATH = "/Users/aneira/lalo/test2";
 
         for (int k = 0; k < URLlist.length; ++k) {
-
             String URL = URLlist[k];
             String NAME = namefile(URL);
             open(URL);
