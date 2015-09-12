@@ -30,7 +30,8 @@ public class AKORI {
     static String NAME;
     
     public static void main(String[] args) throws IOException, InterruptedException {
-        
+        System.out.println("esto es AKORI");
+
         URL = "http://www.mbauchile.cl";
         PATH = "E:\\NetBeansProjects\\AKORI\\";
         NAME = "mbauchile.png";
