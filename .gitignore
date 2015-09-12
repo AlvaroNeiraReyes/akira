@@ -1,3 +1,7 @@
 # Vim files
 *.*~
 
+.DS_Store
+
+*.class
+

@@ -29,42 +29,13 @@ import org.openqa.selenium.*;
 public class DrawLevel {
 
     public static void main(String[] args) throws Exception {
-        String[] URLlist = {"http://www.mbauchile.cl/",
-            "http://www.mbauchile.cl/plan-de-estudios/",
-            "http://www.mbauchile.cl/financiamiento-y-becas/",
-            "http://www.mbauchile.cl/descargar-folleto/",
-            "http://www.mbauchile.cl/tipo/jornada-completa-y-media-jornada",
-            "http://www.mbauchile.cl/2013/06/13/mba-uchile-lider-en-ranking-latinoamericano/",
-            "http://www.mbauchile.cl/plataforma-laboral/",
-            "http://www.mbauchile.cl/servicio-medico/",
-            "http://www.mbauchile.cl/contenido-cursos/",
-            "http://www.mbauchile.cl/tipo/jornada-parcial/",
-            "http://www.mbauchile.cl/todos/noticias/page/2/",
-            "http://www.mbauchile.cl/invitados/",
-            "http://www.mbauchile.cl/mapa-ubicacion/",
-            "http://www.mbauchile.cl/academicos/andres-weintraub/",
-            "http://www.mbauchile.cl/testimonios/felipe-sepulveda/",
-            "http://www.mbauchile.cl/ipad/",
-            "http://www.mbauchile.cl/postulacion-online/",
-            "http://www.mbauchile.cl/admision/",
-            "http://www.mbauchile.cl/doble-grado/",
-            "http://www.mbauchile.cl/caracteristicas/",
-            "http://www.mbauchile.cl/contacto/",
-            "http://www.mbauchile.cl/generaciones/",
-            "http://www.mbauchile.cl/perfil-alumnos/",
-            "http://www.mbauchile.cl/porque-elegirnos/",
-            "http://www.mbauchile.cl/formularios/",
-            "http://www.mbauchile.cl/reglamento/",
-            "http://www.mbauchile.cl/propuesta-academica/",
-            "http://www.mbauchile.cl/u-cursos/",
-            "http://www.mbauchile.cl/egresados/",
-            "http://www.mbauchile.cl/corporacion-egresados/",
-            "http://www.mbauchile.cl/quienes-participan/",
-            "http://www.mbauchile.cl/biblioteca/",
-            "http://www.mbauchile.cl/metodologia/"
+        System.out.println("esto es DrawLevel");
+
+        String[] URLlist = {
+            "http://www.mbauchile.cl"
         };
 
-        String PATH = "E:\\NetBeansProjects\\AKORI\\build\\reports\\tests\\";
+        String PATH = "C:\\Users\\Lalo\\Desktop\\Lalo\\U\\Trabajo de Título\\Experimento y Análisis\\Códigos\\objetos\\test2\\";
 
         for (int k = 0; k < URLlist.length; ++k) {
 
@@ -123,63 +94,63 @@ public class DrawLevel {
                 }
             }
 
-            PrintWriter writer = new PrintWriter(NAME+".txt", "UTF-8");
+            PrintWriter writer = new PrintWriter(PATH + NAME+".txt", "UTF-8");
             
             for (String temp : elements) {
                 writer.println(temp);
             }
             writer.close();
             
-//            int[] conteo = new int[maxj];
-//            for (String temp : elements) {
-//                String[] aux = temp.split(",");
-//                conteo[Integer.parseInt(aux[5]) - 1]++;
-//            }
-//
-//            int acum = 0;
-//            double[] acumulado = new double[maxj];
-//            for (int i =0; i<conteo.length;++i) {
-//                acum += conteo[i];
-//                acumulado[i]=acum;
-//            }
+            int[] conteo = new int[maxj];
+            for (String temp : elements) {
+                String[] aux = temp.split(",");
+                conteo[Integer.parseInt(aux[5]) - 1]++;
+            }
+
+            int acum = 0;
+            double[] acumulado = new double[maxj];
+            for (int i =0; i<conteo.length;++i) {
+                acum += conteo[i];
+                acumulado[i]=acum;
+            }
             
-//            BufferedImage img = ImageIO.read(new File(PATH + NAME + ".png"));
-//            Graphics2D graph = img.createGraphics();
-//            graph.setColor(Color.RED);
-//            ArrayList<String> elementsGraphed = new ArrayList<String>();
-//
-//            for (String temp : elements) {
-//                String[] aux = temp.split(",");
-//                //if (Integer.parseInt(aux[5]) < maxj && acumulado[Integer.parseInt(aux[5]) - 1]*1.1 > acumulado[Integer.parseInt(aux[5])]) {
-//                //if (Integer.parseInt(aux[5]) < maxj && (conteo[Integer.parseInt(aux[5])-1] > conteo[Integer.parseInt(aux[5])] || conteo[Integer.parseInt(aux[5])] > conteo[Integer.parseInt(aux[5])+1])) {
-//                if (Integer.parseInt(aux[5]) < maxj && conteo[Integer.parseInt(aux[5])-1] > conteo[Integer.parseInt(aux[5])]) {
-//                    int x = Integer.parseInt(aux[1]);
-//                    int y = Integer.parseInt(aux[2]);
-//                    int w = Integer.parseInt(aux[3]);
-//                    int h = Integer.parseInt(aux[4]);
-//
-//                    boolean add = true;
-////                    for (String temp1 : elementsGraphed) {
-////                        String[] aux1 = temp1.split(",");
-////                        int x1 = Integer.parseInt(aux1[1]);
-////                        int y1 = Integer.parseInt(aux1[2]);
-////                        int w1 = Integer.parseInt(aux1[3]);
-////                        int h1 = Integer.parseInt(aux1[4]);
-////                        Rectangle rec = new Rectangle(x, y, w, h);
-////                        Rectangle rec1 = new Rectangle(x1, y1, w1, h1);
-////                        if (rec1.contains(rec) || rec.contains(rec1)) {
-////                            add = false;
-////                        }
-////                    }
-//                    if (add) {
-//                        graph.draw(new Rectangle(x, y, w, h));
-//                        elementsGraphed.add(temp);
+            BufferedImage img = ImageIO.read(new File(NAME + ".png"));
+            Graphics2D graph = img.createGraphics();
+            graph.setColor(Color.RED);
+            ArrayList<String> elementsGraphed = new ArrayList<String>();
+
+            for (String temp : elements) {
+                String[] aux = temp.split(",");
+                //if (Integer.parseInt(aux[5]) < maxj && acumulado[Integer.parseInt(aux[5]) - 1]*1.1 > acumulado[Integer.parseInt(aux[5])]) {
+                //if (Integer.parseInt(aux[5]) < maxj && (conteo[Integer.parseInt(aux[5])-1] > conteo[Integer.parseInt(aux[5])] || conteo[Integer.parseInt(aux[5])] > conteo[Integer.parseInt(aux[5])+1])) {
+                if (Integer.parseInt(aux[5]) < maxj && conteo[Integer.parseInt(aux[5])-1] > conteo[Integer.parseInt(aux[5])]) {
+                    int x = Integer.parseInt(aux[1]);
+                    int y = Integer.parseInt(aux[2]);
+                    int w = Integer.parseInt(aux[3]);
+                    int h = Integer.parseInt(aux[4]);
+
+                    boolean add = true;
+//                    for (String temp1 : elementsGraphed) {
+//                        String[] aux1 = temp1.split(",");
+//                        int x1 = Integer.parseInt(aux1[1]);
+//                        int y1 = Integer.parseInt(aux1[2]);
+//                        int w1 = Integer.parseInt(aux1[3]);
+//                        int h1 = Integer.parseInt(aux1[4]);
+//                        Rectangle rec = new Rectangle(x, y, w, h);
+//                        Rectangle rec1 = new Rectangle(x1, y1, w1, h1);
+//                        if (rec1.contains(rec) || rec.contains(rec1)) {
+//                            add = false;
+//                        }
 //                    }
-//                }
-//            }
-//
-//            graph.dispose();
-//            ImageIO.write(img, "png", new File(PATH + NAME + ".png"));
+                    if (add) {
+                        graph.draw(new Rectangle(x, y, w, h));
+                        elementsGraphed.add(temp);
+                    }
+                }
+            }
+
+            graph.dispose();
+            ImageIO.write(img, "png", new File(PATH + NAME + ".png"));
 
 //            BufferedImage img = ImageIO.read(new File(PATH + NAME + ".png"));
 //            Graphics2D graph = img.createGraphics();
@@ -252,7 +223,7 @@ public class DrawLevel {
 //            for (int h = 0; h < conteo.length; ++h) {
 //                System.out.println("depth " + (h + 1) + ":" + conteo[h]);
 //            }
-            close();
+//            close();
         }
     }
 
