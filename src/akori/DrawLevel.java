@@ -27,6 +27,7 @@ import org.openqa.selenium.*;
  * @author Claudio
  */
 public class DrawLevel {
+    public static final String PATH = "/Users/aneira/lalo/test2/";
     public static void main(String[] args) throws Exception {
         System.out.println("esto es DrawLevel");
 
@@ -34,7 +35,6 @@ public class DrawLevel {
             "http://www.mbauchile.cl"
         };
 
-        String PATH = "/Users/aneira/lalo/test2";
 
         for (int k = 0; k < URLlist.length; ++k) {
             String URL = URLlist[k];
@@ -56,10 +56,10 @@ public class DrawLevel {
             }
             Elements e1 = doc.body().getAllElements();
 
-            ArrayList<String> tags = new ArrayList<String>();
+            ArrayList<String> tags = new ArrayList<>();
             screenshot(NAME);
 
-            ArrayList<String> elements = new ArrayList<String>();
+            ArrayList<String> elements = new ArrayList<>();
             int maxj = 0;
             int id = 1;
             for (Element temp : e1) {
@@ -115,7 +115,7 @@ public class DrawLevel {
             BufferedImage img = ImageIO.read(new File(NAME + ".png"));
             Graphics2D graph = img.createGraphics();
             graph.setColor(Color.RED);
-            ArrayList<String> elementsGraphed = new ArrayList<String>();
+            ArrayList<String> elementsGraphed = new ArrayList<>();
 
             for (String temp : elements) {
                 String[] aux = temp.split(",");
@@ -222,6 +222,7 @@ public class DrawLevel {
 //                System.out.println("depth " + (h + 1) + ":" + conteo[h]);
 //            }
 //            close();
+            System.out.println("DrawLevel terminado");
         }
     }
 
