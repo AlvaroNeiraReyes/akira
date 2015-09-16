@@ -6,7 +6,6 @@
 package akori;
 
 import com.codeborne.selenide.ElementsCollection;
-import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -30,17 +29,20 @@ import com.codeborne.selenide.Selenide;
 public class DrawLevel {
     public static final String PATH = "/Users/aneira/lalo/test2/";
     public static final String WEBSITES_PATH = "/Users/aneira/lalo/websites/";
+    public static final String PICTURES_PATH = "/Users/aneira/lalo/akori/build/reports/tests/";
     public static final String[] URLlist = {
         "http://www.mbauchile.cl"
+        //"http://www.businessinsider.com/best-iphone-only-apps-you-cant-get-on-android-2015-6"
         //WEBSITES_PATH+"bi_apps/www.businessinsider.com/best-iphone-only-apps-you-cant-get-on-android-2015-650f4.html"
     };
     public static final Integer MAX_DEPTH = 0;
+    public static final Integer MAX_DEPTH2 = 10;
     public static void main(String[] args) throws Exception {
         System.out.println("esto es DrawLevel");
         for (int k = 0; k < URLlist.length; ++k) {
             String URL = URLlist[k];
+            //String NAME = "businessinsider";
             String NAME = namefile(URL);
-            open(URL);
 
             SelenideElement s = Selenide.$(By.tagName("body"));
             
@@ -48,28 +50,31 @@ public class DrawLevel {
             Elements e1 = doc.body().getAllElements();
 
             ArrayList<String> tags = new ArrayList<>();
-            screenshot(NAME);
+            Selenide.screenshot(NAME);
 
             ArrayList<String> elements = new ArrayList<>();
             int maxj = 0;
-            int id = 1;
+            
             for (Element temp : e1) {
                 System.out.println("Examining element '"+temp.nodeName()+"'");
                 if (tags.indexOf(temp.tagName()) == -1) {
                     tags.add(temp.tagName());
-                    ElementsCollection query = $$(By.tagName(temp.tagName()));
+                    ElementsCollection query = Selenide.$$(By.tagName(temp.tagName()));
+                    int id = 1;
                     for (SelenideElement temp2 : query) {
                         System.out.println("Examining selenide element '" + temp2 + "'");
-
+                        if (id > MAX_DEPTH2) {
+                            break;
+                        }
                         WebElement temp1 = temp2.toWebElement();
                         Point po = temp1.getLocation();
                         Dimension d = temp1.getSize();
                         if (d.width <= 0 || d.height <= 0 || po.x < 0 || po.y < 0) {
                             continue;
                         }
-                        int j = 1;
                         int dep = 0;
-                        for (j = 1; !temp2.equals(s); ++j) {
+                        int j=1;
+                        for (; !temp2.equals(s); ++j) {
                             System.out.println("id="+id+"/"+query.size());
                             System.out.println("dep="+(dep++));
                             if(id==31 || id == 20){
@@ -116,7 +121,14 @@ public class DrawLevel {
                 acumulado[i]=acum;
             }
             
-            BufferedImage img = ImageIO.read(new File(NAME + ".png"));
+            BufferedImage img = null;
+            try{
+                img = ImageIO.read(new File(PICTURES_PATH+NAME + ".png"));
+            }catch (Exception e){
+                System.err.println("Trying to read '"+PICTURES_PATH+NAME+".png'");
+                e.printStackTrace();
+                System.exit(1);
+            }
             Graphics2D graph = img.createGraphics();
             graph.setColor(Color.RED);
             ArrayList<String> elementsGraphed = new ArrayList<>();
@@ -152,6 +164,8 @@ public class DrawLevel {
             }
 
             graph.dispose();
+            
+            //Here it generates the png file
             ImageIO.write(img, "png", new File(PATH + NAME + ".png"));
 
 //            BufferedImage img = ImageIO.read(new File(PATH + NAME + ".png"));
@@ -232,12 +246,15 @@ public class DrawLevel {
     
     public static Document getDoc(String url, Boolean isOffline){
         Document doc = null;
+        
         try {
                 
             if(isOffline){
+                Selenide.open("file://"+url);
                 File in = new File(url);
-                doc = Jsoup.parse(in, "UTF-8");
+                doc = Jsoup.parse(in, "UTF-8", "http://www.google.com");
             }else{
+                Selenide.open(url);
                 doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:24.0) Gecko/20100101 Firefox/24.0")
                       .timeout(0)
                       .referrer("http://www.google.com")
