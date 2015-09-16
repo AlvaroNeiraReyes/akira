@@ -21,6 +21,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.*;
+import com.codeborne.selenide.Selenide;
 
 /**
  *
@@ -28,32 +29,22 @@ import org.openqa.selenium.*;
  */
 public class DrawLevel {
     public static final String PATH = "/Users/aneira/lalo/test2/";
+    public static final String WEBSITES_PATH = "/Users/aneira/lalo/websites/";
+    public static final String[] URLlist = {
+        "http://www.mbauchile.cl"
+        //WEBSITES_PATH+"bi_apps/www.businessinsider.com/best-iphone-only-apps-you-cant-get-on-android-2015-650f4.html"
+    };
+    public static final Integer MAX_DEPTH = 0;
     public static void main(String[] args) throws Exception {
         System.out.println("esto es DrawLevel");
-
-        String[] URLlist = {
-            "http://www.mbauchile.cl"
-        };
-
-
         for (int k = 0; k < URLlist.length; ++k) {
             String URL = URLlist[k];
             String NAME = namefile(URL);
             open(URL);
 
-            SelenideElement s = $(By.tagName("body"));
+            SelenideElement s = Selenide.$(By.tagName("body"));
             
-            Document doc = null;
-            try{
-                doc = Jsoup.connect(URL).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:24.0) Gecko/20100101 Firefox/24.0")
-                    .timeout(0)
-                    .referrer("http://www.google.com")
-                    .get();
-            }
-            catch(Exception e){
-                e.printStackTrace();
-                continue;
-            }
+            Document doc=getDoc(URL,false);
             Elements e1 = doc.body().getAllElements();
 
             ArrayList<String> tags = new ArrayList<>();
@@ -63,10 +54,13 @@ public class DrawLevel {
             int maxj = 0;
             int id = 1;
             for (Element temp : e1) {
+                System.out.println("Examining element '"+temp.nodeName()+"'");
                 if (tags.indexOf(temp.tagName()) == -1) {
                     tags.add(temp.tagName());
                     ElementsCollection query = $$(By.tagName(temp.tagName()));
                     for (SelenideElement temp2 : query) {
+                        System.out.println("Examining selenide element '" + temp2 + "'");
+
                         WebElement temp1 = temp2.toWebElement();
                         Point po = temp1.getLocation();
                         Dimension d = temp1.getSize();
@@ -74,12 +68,20 @@ public class DrawLevel {
                             continue;
                         }
                         int j = 1;
+                        int dep = 0;
                         for (j = 1; !temp2.equals(s); ++j) {
+                            System.out.println("id="+id+"/"+query.size());
+                            System.out.println("dep="+(dep++));
+                            if(id==31 || id == 20){
+                                System.out.println("wawa");
+                            }
                             temp2 = temp2.parent();
-                            if (j > 100) {
+                            if (j > MAX_DEPTH) {
                                 break;
                             }
                         }
+                        System.out.println("post for");
+
                         if(temp.hasText()) 
                             elements.add(temp.nodeName() + "," + po.x + "," + po.y + "," + d.width + "," + d.height + "," + j + "," + 1+ "," + id+ "," + (k+1));
                         else 
@@ -91,6 +93,8 @@ public class DrawLevel {
                     }
                 }
             }
+
+            System.out.println("out of loop");
 
             PrintWriter writer = new PrintWriter(PATH + NAME+".txt", "UTF-8");
             
@@ -223,6 +227,27 @@ public class DrawLevel {
 //            }
 //            close();
             System.out.println("DrawLevel terminado");
+        }
+    }
+    
+    public static Document getDoc(String url, Boolean isOffline){
+        Document doc = null;
+        try {
+                
+            if(isOffline){
+                File in = new File(url);
+                doc = Jsoup.parse(in, "UTF-8");
+            }else{
+                doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows NT 6.1; rv:24.0) Gecko/20100101 Firefox/24.0")
+                      .timeout(0)
+                      .referrer("http://www.google.com")
+                      .get(); 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        } finally {
+            return doc;
         }
     }
 
