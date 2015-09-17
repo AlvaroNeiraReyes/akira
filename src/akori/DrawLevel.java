@@ -36,14 +36,47 @@ public class DrawLevel {
         //WEBSITES_PATH+"bi_apps/www.businessinsider.com/best-iphone-only-apps-you-cant-get-on-android-2015-650f4.html"
     };
     public static final Integer MAX_DEPTH = 100;
-    public static final Integer MAX_DEPTH2 = 100;
+    //public static final Integer MAX_DEPTH2 = 100;
+    static SelenideElement s;
+    static ArrayList<String> elements;
+    static Integer maxj;
+
+    public static void processSelenideElement(SelenideElement temp2, Element temp, Integer id) {
+        System.out.println("Examining selenide element '" + temp2 + "'");
+        WebElement temp1 = temp2.toWebElement();
+        Point po = temp1.getLocation();
+        Dimension d = temp1.getSize();
+        if (d.width <= 0 || d.height <= 0 || po.x < 0 || po.y < 0) {
+            return;
+        }
+        int dep = 0;
+        int j = 1;
+        for (; !temp2.equals(s); ++j) {
+            System.out.println("id=" + id);
+            System.out.println("dep=" + (dep++));
+            temp2 = temp2.parent();
+            if (j > MAX_DEPTH) {
+                break;
+            }
+        }
+        System.out.println("post for");
+        Integer k=0;
+        if (temp.hasText()) {
+            elements.add(temp.nodeName() + "," + po.x + "," + po.y + "," + d.width + "," + d.height + "," + j + "," + 1 + "," + id + "," + (k + 1));
+        } else {
+            elements.add(temp.nodeName() + "," + po.x + "," + po.y + "," + d.width + "," + d.height + "," + j + "," + 0 + "," + id + "," + (k + 1));
+        }
+        if (j > maxj) {
+            maxj = j;
+        }
+    }
     public static void main(String[] args) throws Exception {
         System.out.println("esto es DrawLevel");
         for (int k = 0; k < URLlist.length; ++k) {
             String URL = URLlist[k];
             String NAME = namefile(URL);
 
-            SelenideElement s = Selenide.$(By.tagName("body"));
+            s = Selenide.$(By.tagName("body"));
             
             Document doc=getDoc(URL,false);
             Elements e1 = doc.body().getAllElements();
@@ -51,8 +84,8 @@ public class DrawLevel {
             ArrayList<String> tags = new ArrayList<>();
             Selenide.screenshot(NAME);
 
-            ArrayList<String> elements = new ArrayList<>();
-            int maxj = 0;
+            elements = new ArrayList<>();
+            maxj = 0;
             
             for (Element temp : e1) {
                 System.out.println("Examining element '"+temp.nodeName()+"'");
@@ -61,38 +94,7 @@ public class DrawLevel {
                     ElementsCollection query = Selenide.$$(By.tagName(temp.tagName()));
                     int id = 1;
                     for (SelenideElement temp2 : query) {
-                        System.out.println("Examining selenide element '" + temp2 + "'");
-                        if (id > MAX_DEPTH2) {
-                            break;
-                        }
-                        WebElement temp1 = temp2.toWebElement();
-                        Point po = temp1.getLocation();
-                        Dimension d = temp1.getSize();
-                        if (d.width <= 0 || d.height <= 0 || po.x < 0 || po.y < 0) {
-                            continue;
-                        }
-                        int dep = 0;
-                        int j=1;
-                        for (; !temp2.equals(s); ++j) {
-                            System.out.println("id="+id+"/"+query.size());
-                            System.out.println("dep="+(dep++));
-                            if(id==31 || id == 20){
-                                System.out.println("wawa");
-                            }
-                            temp2 = temp2.parent();
-                            if (j > MAX_DEPTH) {
-                                break;
-                            }
-                        }
-                        System.out.println("post for");
-
-                        if(temp.hasText()) 
-                            elements.add(temp.nodeName() + "," + po.x + "," + po.y + "," + d.width + "," + d.height + "," + j + "," + 1+ "," + id+ "," + (k+1));
-                        else 
-                            elements.add(temp.nodeName() + "," + po.x + "," + po.y + "," + d.width + "," + d.height + "," + j + "," + 0 + "," + id+ "," + (k+1));
-                        if (j > maxj) {
-                            maxj = j;
-                        }
+                        processSelenideElement(temp2,temp,id);
                         id++;
                     }
                 }
