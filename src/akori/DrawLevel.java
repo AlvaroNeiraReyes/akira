@@ -134,31 +134,14 @@ public class DrawLevel {
 
             for (String temp : elements) {
                 String[] aux = temp.split(",");
-                //if (Integer.parseInt(aux[5]) < maxj && acumulado[Integer.parseInt(aux[5]) - 1]*1.1 > acumulado[Integer.parseInt(aux[5])]) {
-                //if (Integer.parseInt(aux[5]) < maxj && (conteo[Integer.parseInt(aux[5])-1] > conteo[Integer.parseInt(aux[5])] || conteo[Integer.parseInt(aux[5])] > conteo[Integer.parseInt(aux[5])+1])) {
                 if (Integer.parseInt(aux[5]) < maxj && conteo[Integer.parseInt(aux[5])-1] > conteo[Integer.parseInt(aux[5])]) {
                     int x = Integer.parseInt(aux[1]);
                     int y = Integer.parseInt(aux[2]);
                     int w = Integer.parseInt(aux[3]);
                     int h = Integer.parseInt(aux[4]);
 
-                    boolean add = true;
-//                    for (String temp1 : elementsGraphed) {
-//                        String[] aux1 = temp1.split(",");
-//                        int x1 = Integer.parseInt(aux1[1]);
-//                        int y1 = Integer.parseInt(aux1[2]);
-//                        int w1 = Integer.parseInt(aux1[3]);
-//                        int h1 = Integer.parseInt(aux1[4]);
-//                        Rectangle rec = new Rectangle(x, y, w, h);
-//                        Rectangle rec1 = new Rectangle(x1, y1, w1, h1);
-//                        if (rec1.contains(rec) || rec.contains(rec1)) {
-//                            add = false;
-//                        }
-//                    }
-                    if (add) {
-                        graph.draw(new Rectangle(x, y, w, h));
-                        elementsGraphed.add(temp);
-                    }
+                    graph.draw(new Rectangle(x, y, w, h));
+                    elementsGraphed.add(temp);
                 }
             }
 
@@ -167,78 +150,6 @@ public class DrawLevel {
             //Here it generates the png file
             ImageIO.write(img, "png", new File(PATH + NAME + ".png"));
 
-//            BufferedImage img = ImageIO.read(new File(PATH + NAME + ".png"));
-//            Graphics2D graph = img.createGraphics();
-//            graph.setColor(Color.RED);
-//            ArrayList<String> elementsGraphed = new ArrayList<String>();
-//
-//            for (String temp : elements) {
-//                String[] aux = temp.split(",");
-//                if (Integer.parseInt(aux[5]) > 1 && Integer.parseInt(aux[5]) < maxj) {
-//                    int x = Integer.parseInt(aux[1]);
-//                    int y = Integer.parseInt(aux[2]);
-//                    int w = Integer.parseInt(aux[3]);
-//                    int h = Integer.parseInt(aux[4]);
-//                    double r = (Math.max(w, h) * 1.0) / (Math.min(w, h) * 1.0);
-//
-//                    if (aux[0].equals("img") && Math.sqrt(w * h) > 200) {
-//                        graph.draw(new Rectangle(x, y, w, h));
-//                        elementsGraphed.add(temp);
-//
-//                    } else if (r >= 1 && r <= 5 && Math.sqrt(w * h) < 400 && Math.sqrt(w * h) > 50) {
-//                        boolean add = true;
-//                        for (String temp1 : elementsGraphed) {
-//                            String[] aux1 = temp1.split(",");
-//                            if (Integer.parseInt(aux1[5]) > Integer.parseInt(aux[5])) {
-//                                int x1 = Integer.parseInt(aux1[1]);
-//                                int y1 = Integer.parseInt(aux1[2]);
-//                                int w1 = Integer.parseInt(aux1[3]);
-//                                int h1 = Integer.parseInt(aux1[4]);
-//                                Rectangle rec = new Rectangle(x, y, w, h);
-//                                Rectangle rec1 = new Rectangle(x1, y1, w1, h1);
-//                                if (rec1.contains(rec)) {
-//                                    add = false;
-//                                }
-//                            }
-//
-//                        }
-//                        if (add) {
-//                            graph.draw(new Rectangle(x, y, w, h));
-//                            elementsGraphed.add(temp);
-//                        }
-//                    }
-//
-//                }
-//            }
-//
-//            graph.dispose();
-//            ImageIO.write(img, "png", new File(PATH + NAME + ".png"));
-//            
-//            int[] conteo = new int[maxj];
-//            for (int j = 1; j <= maxj; ++j) {
-//                BufferedImage img = ImageIO.read(new File(PATH + NAME + ".png"));
-//                Graphics2D graph = img.createGraphics();
-//                graph.setColor(Color.RED);
-//
-//                for (String temp : elements) {
-//                    String[] aux = temp.split(",");
-//                    if (Integer.parseInt(aux[5]) == j) {
-//                        int x = Integer.parseInt(aux[1]);
-//                        int y = Integer.parseInt(aux[2]);
-//                        int w = Integer.parseInt(aux[3]);
-//                        int h = Integer.parseInt(aux[4]);
-//                        graph.draw(new Rectangle(x, y, w, h));
-//                        conteo[j - 1]++;
-//                    }
-//                }
-//                graph.dispose();
-//                ImageIO.write(img, "png", new File(PATH + NAME + (j + 1) + ".png"));
-//            }
-//
-//            for (int h = 0; h < conteo.length; ++h) {
-//                System.out.println("depth " + (h + 1) + ":" + conteo[h]);
-//            }
-//            close();
             System.out.println("DrawLevel terminado");
         }
     }
