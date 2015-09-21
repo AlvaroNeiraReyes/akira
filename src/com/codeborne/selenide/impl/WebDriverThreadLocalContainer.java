@@ -192,7 +192,7 @@ public class WebDriverThreadLocalContainer {
     DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
     capabilities.setCapability(HtmlUnitDriver.INVALIDSELECTIONERROR, true);
     capabilities.setCapability(HtmlUnitDriver.INVALIDXPATHERROR, false);
-    capabilities.setJavascriptEnabled(true);
+    capabilities.setJavascriptEnabled(false);
     if (browser.indexOf(':') > -1) {
       // Use constants BrowserType.IE, BrowserType.FIREFOX, BrowserType.CHROME etc.
       String emulatedBrowser = browser.replaceFirst("htmlunit:(.*)", "$1");
@@ -253,6 +253,8 @@ public class WebDriverThreadLocalContainer {
       capabilities.setCapability(TAKES_SCREENSHOT, true);
       capabilities.setCapability(ACCEPT_SSL_CERTS, true);
       capabilities.setCapability(SUPPORTS_ALERTS, true);
+      capabilities.setJavascriptEnabled(false);
+
 
       Class<?> clazz = Class.forName(className);
       if (WebDriverProvider.class.isAssignableFrom(clazz)) {
@@ -278,6 +280,8 @@ public class WebDriverThreadLocalContainer {
     try {
       DesiredCapabilities capabilities = new DesiredCapabilities();
       capabilities.setBrowserName(browser);
+      capabilities.setJavascriptEnabled(false);
+
       return new RemoteWebDriver(new URL(remote), capabilities);
     } catch (MalformedURLException e) {
       throw new IllegalArgumentException("Invalid 'remote' parameter: " + remote, e);
