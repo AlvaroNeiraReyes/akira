@@ -31,12 +31,15 @@ public class DrawLevel {
     public static final String WEBSITES_PATH = "/Users/aneira/lalo/websites/";
     public static final String PICTURES_PATH = "/Users/aneira/lalo/akori/build/reports/tests/";
     public static final String[] URLlist = {
-        "http://www.mbauchile.cl"
+        //"http://www.mbauchile.cl"
         //"http://www.businessinsider.com/best-iphone-only-apps-you-cant-get-on-android-2015-6"
         //WEBSITES_PATH+"bi_apps/www.businessinsider.com/best-iphone-only-apps-you-cant-get-on-android-2015-650f4.html"
+        //WEBSITES_PATH+"ds_berlin/www.designsponge.com/2015/05/berlin-germany-city-guide.html"
+        //WEBSITES_PATH+"ds_argentina/www.designsponge.com/2012/12/palermo-buenos-aires-argentina-city-guide.html"
+        WEBSITES_PATH+"columbia_about/www.columbia.edu/content/about-columbia.html"
     };
     public static final Integer MAX_DEPTH = 100;
-    public static final Integer MAX_DEPTH2 = 100;
+    //public static final Integer MAX_DEPTH2 = 100;
     static SelenideElement s;
     static ArrayList<String> elements;
     static Integer maxj;
@@ -79,7 +82,7 @@ public class DrawLevel {
             By by = By.tagName("body");
             s = Selenide.$(by);
             
-            Document doc=getDoc(URL,false);
+            Document doc=getDoc(URL,true);
             Elements e1 = doc.body().getAllElements();
 
             ArrayList<String> tags = new ArrayList<>();
@@ -97,9 +100,9 @@ public class DrawLevel {
                     for (SelenideElement temp2 : query) {
                         processSelenideElement(temp2,temp,id);
                         id++;
-                        if(id>MAX_DEPTH2){
-                            continue;
-                        }
+                        //if(id>MAX_DEPTH2){
+                        //    continue;
+                        //}
                     }
                 }
             }
@@ -179,9 +182,8 @@ public class DrawLevel {
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
-        } finally {
-            return doc;
-        }
+        } 
+        return doc;
     }
 
     public static String namefile(String url) {
