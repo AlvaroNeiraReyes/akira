@@ -8,3 +8,6 @@
 # build files
 build/*
 
+# IntelliJ IDEA files
+.idea
+

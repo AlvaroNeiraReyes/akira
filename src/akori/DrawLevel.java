@@ -29,21 +29,21 @@ import com.codeborne.selenide.Selenide;
 public class DrawLevel {
     public static final String PATH = "/Users/aneira/lalo/test2/";
     public static final String WEBSITES_PATH = "/Users/aneira/lalo/websites/";
-    public static final String PICTURES_PATH = "/Users/aneira/lalo/akori/build/reports/tests/";
+    public static final String PICTURES_PATH = "/Users/aneira/akori/build/reports/tests/";
     public static final String[] URLlist = {
-        //"http://www.mbauchile.cl"
+        "http://www.mbauchile.cl"
         //"http://www.businessinsider.com/best-iphone-only-apps-you-cant-get-on-android-2015-6"
         //WEBSITES_PATH+"bi_apps/www.businessinsider.com/best-iphone-only-apps-you-cant-get-on-android-2015-650f4.html"
         //WEBSITES_PATH+"ds_berlin/www.designsponge.com/2015/05/berlin-germany-city-guide.html"
         //WEBSITES_PATH+"ds_argentina/www.designsponge.com/2012/12/palermo-buenos-aires-argentina-city-guide.html"
-        WEBSITES_PATH+"columbia_about/www.columbia.edu/content/about-columbia.html"
+        //WEBSITES_PATH+"columbia_about/www.columbia.edu/content/about-columbia.html"
     };
     public static final Integer MAX_DEPTH = 100;
     //public static final Integer MAX_DEPTH2 = 100;
     static SelenideElement s;
     static ArrayList<String> elements;
     static Integer maxj;
-
+    static Integer numberElements;
     public static void processSelenideElement(SelenideElement temp2, Element temp, Integer id) {
         System.out.println("Examining selenide element '" + temp2 + "'");
         WebElement temp1 = temp2.toWebElement();
@@ -55,8 +55,6 @@ public class DrawLevel {
         int dep = 0;
         int j = 1;
         for (; !temp2.equals(s); ++j) {
-            System.out.println("id=" + id);
-            System.out.println("dep=" + (dep++));
             temp2 = temp2.parent();
             if (j > MAX_DEPTH) {
                 break;
@@ -64,11 +62,13 @@ public class DrawLevel {
         }
         System.out.println("post for");
         Integer k=0;
+        String str="";
         if (temp.hasText()) {
-            elements.add(temp.nodeName() + "," + po.x + "," + po.y + "," + d.width + "," + d.height + "," + j + "," + 1 + "," + id + "," + (k + 1));
+            str = temp.nodeName() + "," + po.x + "," + po.y + "," + d.width + "," + d.height + "," + j + "," + 1 + "," + id + "," + (k + 1);
         } else {
-            elements.add(temp.nodeName() + "," + po.x + "," + po.y + "," + d.width + "," + d.height + "," + j + "," + 0 + "," + id + "," + (k + 1));
+            str = temp.nodeName() + "," + po.x + "," + po.y + "," + d.width + "," + d.height + "," + j + "," + 0 + "," + id + "," + (k + 1);
         }
+        elements.add(str);
         if (j > maxj) {
             maxj = j;
         }
@@ -82,7 +82,7 @@ public class DrawLevel {
             By by = By.tagName("body");
             s = Selenide.$(by);
             
-            Document doc=getDoc(URL,true);
+            Document doc=getDoc(URL,false);
             Elements e1 = doc.body().getAllElements();
 
             ArrayList<String> tags = new ArrayList<>();
@@ -90,20 +90,30 @@ public class DrawLevel {
 
             elements = new ArrayList<>();
             maxj = 0;
-            
-            for (Element temp : e1) {
-                System.out.println("Examining element '"+temp.nodeName()+"'");
-                if (tags.indexOf(temp.tagName()) == -1) {
-                    tags.add(temp.tagName());
-                    ElementsCollection query = Selenide.$$(By.tagName(temp.tagName()));
-                    int id = 1;
-                    for (SelenideElement temp2 : query) {
-                        processSelenideElement(temp2,temp,id);
-                        id++;
-                        //if(id>MAX_DEPTH2){
-                        //    continue;
-                        //}
-                    }
+            numberElements = e1.size();
+            Integer numberSelenideElements=0;
+            System.out.println("number of elements="+numberElements);
+            Integer elementCounter = 0;
+            for (Element elem : e1) {
+                System.out.println("Examining element '"+elem.nodeName()+"'");
+                elementCounter++;
+                if (tags.indexOf(elem.tagName()) != -1) {
+                    System.out.println("Skipping "+elem.tagName());
+                    continue;
+                }
+                tags.add(elem.tagName());
+                ElementsCollection selenideElements = Selenide.$$(By.tagName(elem.tagName()));
+                numberSelenideElements=selenideElements.size();
+                System.out.println("number of selenide elements="+numberSelenideElements);
+                int id = 1;
+                for (SelenideElement temp2 : selenideElements) {
+                    System.out.println(id+"/"+numberSelenideElements+"/"+elementCounter + "/" + numberElements);
+
+                    processSelenideElement(temp2,elem,id);
+                    id++;
+                    //if(id>MAX_DEPTH2){
+                    //    continue;
+                    //}
                 }
             }
 
