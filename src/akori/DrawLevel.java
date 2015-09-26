@@ -21,15 +21,17 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.*;
 import com.codeborne.selenide.Selenide;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 
 /**
  *
  * @author Claudio
  */
 public class DrawLevel {
-    public static final String PATH = "/Users/aneira/lalo/test2/";
-    public static final String WEBSITES_PATH = "/Users/aneira/lalo/websites/";
-    public static final String PICTURES_PATH = "/Users/aneira/akori/build/reports/tests/";
+    public static final String RESULTS_PATH = "../test2/";
+    public static final String WEBSITES_PATH = "../websites/";
+    public static final String PICTURES_PATH = "./build/reports/tests/";
     public static final String[] URLlist = {
         //"http://www.mbauchile.cl"
         //"http://www.businessinsider.com/best-iphone-only-apps-you-cant-get-on-android-2015-6"
@@ -40,7 +42,7 @@ public class DrawLevel {
         //WEBSITES_PATH+"columbia_adm/www.columbia.edu/node/52.html" //missing
 //        WEBSITES_PATH+"columbia_nobel/www.columbia.edu/content/nobel-laureates.html" //105 minutes
         //WEBSITES_PATH+"dc_manhattan/www.divinecaroline.com/lifestyle/food-drink/how-make-manhattan.html"
-        //WEBSITES_PATH+"ds_eggs/www.designsponge.com/2015/04/in-the-kitchen-with-marnie-andrea-and-jens-deviled-eggs.html"
+        toAbsolutePath(WEBSITES_PATH)+"/ds_eggs/www.designsponge.com/2015/04/in-the-kitchen-with-marnie-andrea-and-jens-deviled-eggs.html"
         //WEBSITES_PATH+"ds_instagram/www.designsponge.com/2014/09/10-travel-instagram-feeds-to-follow-and-swoon-over.html"
         //WEBSITES_PATH+"ds_london/www.designsponge.com/2015/03/24-hours-in-london-england-with-james-greig.html"
         //WEBSITES_PATH+"emol_vino/www.emol.com/tendenciasymujer/Noticias/2015/06/09/27386/Expertos-eligen-a-vino-sudafricano-como-el-mejor-del-mundo.html"
@@ -58,7 +60,8 @@ public class DrawLevel {
        // WEBSITES_PATH+"wiki_paine/es.wikipedia.org/wiki/Parque_nacional_Torres_del_Paine.html" //paragraphs missing
         //WEBSITES_PATH+"wiki_pisco/es.wikipedia.org/wiki/Pisco_(aguardiente).html" //paragraphs reguleque
 //          WEBSITES_PATH+"wired_note4/www.wired.com/2014/10/samsung-galaxy-note-4-2/index.html"
-          WEBSITES_PATH+"enfem/Diez%20alimentos%20que%20puedes%20comer%20antes%20de%20hacer%20ejercicio.htm"
+//          WEBSITES_PATH+"enfem/Diez%20alimentos%20que%20puedes%20comer%20antes%20de%20hacer%20ejercicio.htm" //84 minutes and didn't stop
+//          WEBSITES_PATH+"enfem/Recetas%20sin%20gluten%20-%20enfemenino.htm" //No results after 4 hours
     };
     public static final Integer MAX_DEPTH = 100;
     //public static final Integer MAX_DEPTH2 = 100;
@@ -140,7 +143,7 @@ public class DrawLevel {
 
             System.out.println("out of loop");
 
-            PrintWriter writer = new PrintWriter(PATH + NAME+".txt", "UTF-8");
+            PrintWriter writer = new PrintWriter(RESULTS_PATH + NAME+".txt", "UTF-8");
             
             for (String temp : elements) {
                 writer.println(temp);
@@ -188,7 +191,7 @@ public class DrawLevel {
             graph.dispose();
             
             //Here it generates the png file
-            ImageIO.write(img, "png", new File(PATH + NAME + ".png"));
+            ImageIO.write(img, "png", new File(RESULTS_PATH + NAME + ".png"));
 
             System.out.println("DrawLevel terminado");
         }
@@ -200,6 +203,7 @@ public class DrawLevel {
         try {
                 
             if(isOffline){
+                System.out.println("Trying to open 'file://"+url+"'");
                 Selenide.open("file://"+url);
                 File in = new File(url2file(url));
                 doc = Jsoup.parse(in, "UTF-8", "http://www.google.com");
@@ -224,6 +228,18 @@ public class DrawLevel {
         new_url = new_url.replaceAll("http", "");
         new_url = new_url.replaceAll(":", "");
         return new_url;
+    }
+
+    public static String toAbsolutePath(String relativePath){
+        Path p = Paths.get(relativePath);
+        String retVal="";
+        try {
+            retVal = p.toAbsolutePath().toRealPath().toString();
+        }catch(Exception e){
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return retVal;
     }
 
     public static String url2file(String url) {
